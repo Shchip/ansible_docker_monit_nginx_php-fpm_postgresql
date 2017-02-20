@@ -1,0 +1,44 @@
+- name: Update apt-cache
+  apt:
+    update_cache=yes
+
+- name: Install Dependencies
+  apt: name={{ item }} state=present
+  with_items:
+    - linux-image-extra-{{ansible_kernel}}
+    - python-pip
+    - apt-transport-https
+    - ca-certificates
+    - curl
+    - software-properties-common
+
+- name: Install docker GPG key
+  apt_key:
+    keyserver: hkp://p80.pool.sks-keyservers.net:80
+    id: 58118E89F3A912897C070ADBF76221572C52609D
+
+- name: Add docker apt repository
+  apt_repository:
+    repo: deb https://apt.dockerproject.org/repo ubuntu-xenial main
+    update_cache: yes
+
+- name: Update apt-cache
+  apt:
+    update_cache=yes
+
+- name: Install docker package
+  apt:
+    name=docker-engine
+    state=present
+
+- name: Restart Docker
+  service:
+    name=docker
+    state=restarted
+    enabled=yes
+
+- name: Install Docker-py
+  pip:
+    name=docker-py
+    state=present
+

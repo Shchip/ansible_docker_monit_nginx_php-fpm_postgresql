@@ -1,0 +1,20 @@
+- name: upload DB configuration file to the docker host
+  copy:
+    src={{ item }}
+    dest=/tmp/pgsql/
+  with_fileglob:
+    - ./files/pgsql/*
+
+- name: build the image ansible-pgsql
+  docker_image:
+    name: ansible-pgsql
+    tag: v1
+    path: /tmp/pgsql
+    state: present
+
+- name: run pgsql in a docker container
+  docker_container:
+    name: pgsql_v1
+    image: "ansible-pgsql:v1"
+    state: started
+    ports: "5432:5432"

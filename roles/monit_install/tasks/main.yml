@@ -1,0 +1,17 @@
+- name: Update apt-cache
+  apt:
+    update_cache=yes
+
+- name: Install Monit
+  apt:
+    name=monit
+    state=present
+  notify: Restart Monit
+
+- name: upload Monit configuration file to Host-Machine
+  copy:
+    src={{ item.0 }}
+    dest={{ item.1 }}
+  with_together:
+    - [ './files/monit/monitrc', './files/monit/filesystem' ]
+    - [ '/etc/monit/', '/etc/monit/conf-enabled/' ]

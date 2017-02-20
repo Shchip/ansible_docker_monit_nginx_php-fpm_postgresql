@@ -1,0 +1,30 @@
+- name: upload WEB configuration file to the docker host
+  copy:
+    src={{ item }}
+    dest=/tmp/nginx_php-fpm/
+  with_fileglob:
+    - ./files/nginx_php-fpm/*
+
+- name: upload WEB site file to the docker host
+  copy:
+    src={{ item }}
+    dest=/tmp/nginx_php-fpm/site/
+  with_fileglob:
+    - ./files/nginx_php-fpm/site/*
+
+- name: build the image ngnix and php-fpm
+  docker_image:
+    name: ansible-nginx-php-fpm
+    tag: v1
+    path: /tmp/nginx_php-fpm
+    state: present
+
+
+- name: run nginx and php-fpm in a docker container
+  docker_container:
+    name: nginx_v1
+    image: "ansible-nginx-php-fpm:v1"
+    state: started
+    ports: "80:80"
+    links: "pgsql_v1:pgsql"
+

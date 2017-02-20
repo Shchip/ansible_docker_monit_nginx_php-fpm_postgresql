@@ -1,0 +1,9 @@
+[docker]
+192.168.0.230
+
+#[docker]
+#192.168.0.230 ansible_connection=ssh ansible_ssh_user=USER_NAME
+
+
+#[docker]
+#192.168.0.230 ansible_connection=ssh ansible_ssh_user=USER_NAME ansible_ssh_pass=PASSWORD ansible_sudo_pass=PASSWORD

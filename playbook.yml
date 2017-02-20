@@ -1,0 +1,19 @@
+- hosts: docker
+  become: yes
+  become_method: sudo
+  gather_facts: false
+
+  pre_tasks:
+   - name: Install Python2
+     raw: test -e /usr/bin/python || (apt -y update && apt install -y python-minimal)
+
+- hosts: docker
+  become: yes
+  become_method: sudo
+
+
+  roles:
+    - docker_install
+    - monit_install
+    - pgsql_container
+    - nginx_php-fpm_container
